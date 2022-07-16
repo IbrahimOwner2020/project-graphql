@@ -1,38 +1,31 @@
-import * as React from "react"
+import React from "react";
+import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 import {
-  ChakraProvider,
-  Box,
-  Text,
-  Link,
-  VStack,
-  Code,
-  Grid,
-  theme,
-} from "@chakra-ui/react"
-import { ColorModeSwitcher } from "./ColorModeSwitcher"
-import { Logo } from "./Logo"
+	ChakraProvider,
+	Box,
+	VStack,
+	Grid,
+	theme,
+} from "@chakra-ui/react";
+import Clients from "./components/Clients";
 
-export const App = () => (
-  <ChakraProvider theme={theme}>
-    <Box textAlign="center" fontSize="xl">
-      <Grid minH="100vh" p={3}>
-        <ColorModeSwitcher justifySelf="flex-end" />
-        <VStack spacing={8}>
-          <Logo h="40vmin" pointerEvents="none" />
-          <Text>
-            Edit <Code fontSize="xl">src/App.tsx</Code> and save to reload.
-          </Text>
-          <Link
-            color="teal.500"
-            href="https://chakra-ui.com"
-            fontSize="2xl"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn Chakra
-          </Link>
-        </VStack>
-      </Grid>
-    </Box>
-  </ChakraProvider>
-)
+const client = new ApolloClient({
+	uri: "http://localhost:4000/graphql",
+	cache: new InMemoryCache(),
+});
+
+const App: React.FC = (): JSX.Element => (
+	<ApolloProvider client={client}>
+		<ChakraProvider theme={theme}>
+			<Box textAlign="center" fontSize="xl">
+				<Grid minH="100vh" p={3}>
+					<VStack spacing={8}>
+						<Clients />
+					</VStack>
+				</Grid>
+			</Box>
+		</ChakraProvider>
+	</ApolloProvider>
+);
+
+export default App;
